@@ -58,8 +58,8 @@ install_ubuntu_requirements() {
       apt-get remove --purge -y --allow-change-held-packages cuda-nvrtc-dev*
     fi
 
-    CUBLAS_CUDA_VERSION=$(echo $CUDA_VER | sed 's/\./-/g')
-    NVRTC_CUDA_VERSION=$(echo $CUDA_VER | sed 's/\./-/g')
+    CUBLAS_CUDA_VERSION=$(echo $CUDA_VER | cut -d. -f1,2 | sed 's/\./-/g')
+    NVRTC_CUDA_VERSION=$(echo $CUDA_VER | cut -d. -f1,2 | sed 's/\./-/g')
 
     apt-get install -y --no-install-recommends \
         libcudnn9-cuda-13=${CUDNN_VER} \
@@ -119,9 +119,9 @@ install_tensorrt() {
     PY_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
     PARSED_PY_VERSION=$(echo "${PY_VERSION//./}")
 
-    TRT_CUDA_VERSION=${CUDA_VER}
+    TRT_CUDA_VERSION=$(echo $CUDA_VER | cut -d. -f1,2)
     # No CUDA 13.1 version for TensorRT yet. Use CUDA 13.0 package instead.
-    if [ "$CUDA_VER" = "13.1" ]; then
+    if [ "$TRT_CUDA_VERSION" = "13.1" ]; then
         TRT_CUDA_VERSION="13.0"
     fi
     TRT_VER_SHORT=$(echo $TRT_VER | cut -d. -f1-3)

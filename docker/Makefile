@@ -172,7 +172,7 @@ endif
     		--env "CCACHE_BASEDIR=$(CODE_DIR)" \
     		--env "CONAN_HOME=$(CONAN_DIR)" \
     		--workdir $(WORK_DIR) \
-    		--hostname $(shell hostname)-$* \
+    		$(if $(DOCKER_HOSTNAME),--hostname $(DOCKER_HOSTNAME),) \
     		--name $(CONTAINER_NAME)-$*-$(USER_NAME) \
     		--tmpfs /tmp:exec \
     		$(IMAGE_WITH_TAG)$(IMAGE_TAG_SUFFIX) $(RUN_CMD)
